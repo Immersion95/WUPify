@@ -1,45 +1,69 @@
 # WUPify
 
-Simple tool to clean and prepare **No-Intro CDN folders** for **WUP Installer** and **Cemu**.
+WUPify is a simple batch tool for cleaning and preparing **No-Intro Wii U CDN folders** for **WUP Installer** and **Cemu**.
 
-Yes **Cemu** can play it directly, you don't need to decrypt it anymore ! 
-You can effectively use the same folders to play with **Cemu** and install directly to your **Wii U**.
-
----
+**Cemu can use the prepared folders directly**, so there is no need to decrypt them first. The same prepared folders can also be copied to your Wii U SD card for installation with **WUP Installer**.
 
 ## Dependencies
 
 - Python 3.10+
 - `cryptography`
 
-Install with:
-
-```bash
-pip install cryptography
-```
-
----
+On Windows, `Launch WUPify.bat` automatically installs `cryptography` if it is missing.
 
 ## How to use
 
-1. Put these files together in the main folder:
-   - `WUPify.py`  
-   - `Launch WUPify.bat`  
-   - `title.cert` *(you need to provide it yourself)*
+### Windows
 
-2. Double-click **Launch WUPify.bat**
+Put these files in the main folder of your Wii U CDN collection:
 
-It will automatically clean and fix all subfolders.
+```text
+WUPify.py
+Launch WUPify.bat
+```
 
----
+Then double-click:
 
-## Notes
+```text
+Launch WUPify.bat
+```
 
-- **Cemu:** can play the folders directly (no decryption needed)  
-- **WUP Installer:** copy the prepared folders to `SD:\install\` on your Wii U  
-- **title.cert** is required and must be next to the script  
-- **Expected hash:**  
-  - CRC32: `0B80C239`  
-  - MD5: `420D5E6BB1BCB09B234F02CF6A6F4597`  
-- You can get it with **WiiUDownloader** → *Tools → Generate fake ticket and cert*  
-  *(it's the same for all games, updates, and DLCs)*
+WUPify scans the subfolders recursively and prepares the titles it finds.
+
+### Command line
+
+```bash
+python WUPify.py --path . --recursive
+```
+
+Preview the changes without modifying any files:
+
+```bash
+python WUPify.py --path . --recursive --dry-run
+```
+
+Use `python WUPify.py --help` to see the available options.
+
+## Usage
+
+- **Cemu:** use the prepared title folder directly.
+- **WUP Installer:** copy the prepared title folder to `SD:\install\` on your Wii U SD card.
+
+A prepared title folder uses the standard WUP layout:
+
+```text
+00000000.app
+00000001.app
+...
+title.tmd
+title.tik
+title.cert
+```
+
+WUPify leaves titles that are already ready untouched and reports any title it cannot prepare safely.
+
+## Credits
+
+Parts of WUPify are based on [WiiUDownloader](https://github.com/Xpl0itU/WiiUDownloader) by Xpl0itU.
+
+WiiUDownloader is licensed under the GNU General Public License v3.0. WUPify is distributed under the GNU General Public License v3.0 as well. See `LICENSE`.
